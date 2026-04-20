@@ -38,4 +38,10 @@ public class Shape {
     public int x(int i)     { return coords[i][0]; }
     public int y(int i)     { return coords[i][1]; }
     public Tetrominoe getShape() { return pieceShape; }
+
+    public int minY() {
+        int m = coords[0][1];
+        for (int i = 0; i < 4; i++) m = Math.min(m, coords[i][1]);
+        return m;
+    }
 }

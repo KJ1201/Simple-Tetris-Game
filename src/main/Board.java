@@ -25,6 +25,8 @@ public class Board extends JPanel {
     void start() {
         curPiece = new Shape();
         board    = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
+        clearBoard();
+        newPiece();
     }
 
     private int squareWidth()  { return (int) getSize().getWidth()  / BOARD_WIDTH;  }
@@ -32,6 +34,38 @@ public class Board extends JPanel {
 
     private Tetrominoe shapeAt(int x, int y) {
         return board[(y * BOARD_WIDTH) + x];
+    }
+
+    private void clearBoard() {
+        for (int i = 0; i < BOARD_HEIGHT * BOARD_WIDTH; i++)
+            board[i] = Tetrominoe.NoShape;
+    }
+
+    private void newPiece() {
+        curPiece.setRandomShape();
+        curX = BOARD_WIDTH / 2 + 1;
+        curY = BOARD_HEIGHT - 1 + curPiece.minY();
+
+        if (!tryMove(curPiece, curX, curY)) {
+            curPiece.setShape(Tetrominoe.NoShape);
+            statusbar.setText("Game over");
+        }
+    }
+
+    private boolean tryMove(Shape piece, int newX, int newY) {
+        for (int i = 0; i < 4; i++) {
+            int x = newX + piece.x(i);
+            int y = newY - piece.y(i);
+            if (x < 0 || x >= BOARD_WIDTH || y < 0 || y >= BOARD_HEIGHT)
+                return false;
+            if (shapeAt(x, y) != Tetrominoe.NoShape)
+                return false;
+        }
+        curPiece = piece;
+        curX     = newX;
+        curY     = newY;
+        repaint();
+        return true;
     }
 
     @Override

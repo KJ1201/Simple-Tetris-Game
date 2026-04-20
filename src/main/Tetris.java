@@ -17,8 +17,12 @@ public class Tetris extends JFrame {
         statusbar = new JLabel(" 0");
         add(statusbar, BorderLayout.SOUTH);
 
-        setTitle("Java Project - 24BCS10791, 24BCS10403, 24BCS107XX, 24BCS107XX");
-        setSize(600, 800);
+        var board = new Board(this);
+        add(board);
+        board.start();
+
+        setTitle("Tetris");
+        setSize(200, 400);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);

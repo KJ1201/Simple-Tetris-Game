@@ -11,6 +11,7 @@ public class Board extends JPanel {
     private final int BOARD_WIDTH  = 10;
     private final int BOARD_HEIGHT = 22;
 
+    private boolean isFallingFinished = false;
     private JLabel statusbar;
     private Shape curPiece;
     private Tetrominoe[] board;
@@ -67,6 +68,32 @@ public class Board extends JPanel {
         repaint();
         return true;
     }
+
+    // ── NEW in this commit ────────────────────────────────────────────────
+
+    private void pieceDropped() {
+        for (int i = 0; i < 4; i++) {
+            int x = curX + curPiece.x(i);
+            int y = curY - curPiece.y(i);
+            board[(y * BOARD_WIDTH) + x] = curPiece.getShape();
+        }
+        if (!isFallingFinished) newPiece();
+    }
+
+    private void oneLineDown() {
+        if (!tryMove(curPiece, curX, curY - 1)) pieceDropped();
+    }
+
+    private void dropDown() {
+        int newY = curY;
+        while (newY > 0) {
+            if (!tryMove(curPiece, curX, newY - 1)) break;
+            newY--;
+        }
+        pieceDropped();
+    }
+
+    // ── End of additions ──────────────────────────────────────────────────
 
     @Override
     public void paintComponent(Graphics g) {

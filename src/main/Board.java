@@ -22,11 +22,44 @@ public class Board extends JPanel {
         statusbar = parent.getStatusBar();
     }
 
+    void start() {
+        curPiece = new Shape();
+        board    = new Tetrominoe[BOARD_WIDTH * BOARD_HEIGHT];
+    }
+
     private int squareWidth()  { return (int) getSize().getWidth()  / BOARD_WIDTH;  }
     private int squareHeight() { return (int) getSize().getHeight() / BOARD_HEIGHT; }
 
     private Tetrominoe shapeAt(int x, int y) {
         return board[(y * BOARD_WIDTH) + x];
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        doDrawing(g);
+    }
+
+    private void doDrawing(Graphics g) {
+
+        int boardTop = (int) getSize().getHeight() - BOARD_HEIGHT * squareHeight();
+
+        for (int i = 0; i < BOARD_HEIGHT; i++)
+            for (int j = 0; j < BOARD_WIDTH; j++) {
+                Tetrominoe shape = shapeAt(j, BOARD_HEIGHT - i - 1);
+                if (shape != Tetrominoe.NoShape)
+                    drawSquare(g, j * squareWidth(),
+                            boardTop + i * squareHeight(), shape);
+            }
+
+        if (curPiece.getShape() != Tetrominoe.NoShape)
+            for (int i = 0; i < 4; i++) {
+                int x = curX + curPiece.x(i);
+                int y = curY - curPiece.y(i);
+                drawSquare(g, x * squareWidth(),
+                        boardTop + (BOARD_HEIGHT - y - 1) * squareHeight(),
+                        curPiece.getShape());
+            }
     }
 
     private void drawSquare(Graphics g, int x, int y, Tetrominoe shape) {

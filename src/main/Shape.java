@@ -33,5 +33,9 @@ public class Shape {
         pieceShape = shape;
     }
 
+    void setX(int i, int x) { coords[i][0] = x; }
+    void setY(int i, int y) { coords[i][1] = y; }
+    public int x(int i)     { return coords[i][0]; }
+    public int y(int i)     { return coords[i][1]; }
     public Tetrominoe getShape() { return pieceShape; }
 }
